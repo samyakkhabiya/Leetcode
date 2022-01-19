@@ -32,16 +32,14 @@ int main()
 int kthSmallest(int mat[MAX][MAX], int n, int k)
 {
   //Your code here
-  vector<int>v(n*n);
-  int z=0;
+  vector<int>v;
     for(int i=0;i<n;i++)
     {
         for(int j=0;j<n;j++)
         {
-            v[z]=mat[i][j];
-            z++;
+            v.push_back(mat[i][j]);
         }
     }
     sort(v.begin(),v.end());
-    return v[k-1];
+    return v.at(k-1);
 }
