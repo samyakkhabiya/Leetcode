@@ -1,63 +1,44 @@
-class TrieNode{
-    int val;
-    TrieNode* binary[2];
-    
-  public:
-    
-    TrieNode()
-    {
-        binary[0] = binary[1] = NULL;
-        
-    }
-    
-    ~TrieNode()
-    {
-        if(binary[0])
-            delete(binary[0]);
-        if(binary[1])
-            delete(binary[1]);
-    }
-    
-    void insert(int n)
-    {
-        TrieNode* curr = this;
-        for(int i=30;i>=0;i--)
-        {
-            bool bit = n & (1<<i);
-            // cout<<bit<<endl;
-            if(!(curr->binary[bit]))
-                curr->binary[bit] = new TrieNode();
-            curr = curr->binary[bit];                
-        }
-        curr->val = n;
-    }
-    
-    int getOpposite(int n)
-    {
-        TrieNode* curr = this;
-        for(int i=30;i>=0;i--)
-        {
-            bool bit = n & (1<<i);
-            if(curr->binary[!bit])
-                curr = curr->binary[!bit];
-            else 
-                curr = curr->binary[bit];
-        }
-        return curr->val;
-    }
-};
-
-
 class Solution {
 public:
-    int findMaximumXOR(vector<int>& nums) {
-        TrieNode* root = new TrieNode();
-        for(int n:nums)
-            root->insert(n);
-        int res=0;
-        for(int n:nums)
-            res = max(res,n^root->getOpposite(n));
-        return res;
+    int findMaximumXOR(vector<int>& arr) {
+        int maxx = 0, mask = 0;
+        int n=arr.size();
+ 
+    set<int> se;
+ 
+    for (int i = 30; i >= 0; i--) {
+ 
+        // set the i'th bit in mask
+        // like 100000, 110000, 111000..
+        mask |= (1 << i);
+ 
+        for (int i = 0; i < n; ++i) {
+ 
+            // Just keep the prefix till
+            // i'th bit neglecting all
+            // the bit's after i'th bit
+            se.insert(arr[i] & mask);
+        }
+ 
+        int newMaxx = maxx | (1 << i);
+ 
+        for (int prefix : se) {
+ 
+            // find two pair in set
+            // such that a^b = newMaxx
+            // which is the highest
+            // possible bit can be obtained
+            if (se.count(newMaxx ^ prefix)) {
+                maxx = newMaxx;
+                break;
+            }
+        }
+ 
+        // clear the set for next
+        // iteration
+        se.clear();
     }
-    
+ 
+    return maxx;
+    }
 };
