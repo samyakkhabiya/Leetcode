@@ -1,5 +1,5 @@
 # Delete nodes having greater value on right
-## Medium 
+##  Medium 
 <div class="problem-statement">
                 <p></p><p><span style="font-size:18px">Given a singly linked list, remove all the nodes which have a greater value on its following nodes.</span></p>
 
