@@ -47,24 +47,49 @@ class Solution
 {
     public:
     
+   Node* reverseList(Node* head) {
+        Node* te=NULL;
+        while(head!=NULL){
+            Node* next=head->next;
+            head->next=te;
+            te=head;
+            head=next;
+        }
+        return te;
+    }
+    
     Node *compute(Node *head)
     {
         // your code goes here
-        //base condition
-       if(head == NULL || head->next==NULL){
-           return head;
-       }
-       
-       //funciton call
-       Node *temp = compute(head->next);
-       
-       //internal work
-       if(head->data < temp->data){
-           delete head;
-           return temp;
-       }
-       head->next = temp;
-       return head;
+        head=reverseList(head);
+        Node* current = head;
+
+    /* Initialize max */
+    Node* maxnode = head;
+    Node* temp;
+
+    while (current != NULL && 
+           current->next != NULL) 
+    {
+        /* If current is smaller than max,
+        then delete current */
+        if (current->next->data < maxnode->data) 
+        {
+            temp = current->next;
+            current->next = temp->next;
+            free(temp);
+        }
+
+        /* If current is greater than max, 
+            then update max and move current */
+        else
+        {
+            current = current->next;
+            maxnode = current;
+        }
+    }
+    return reverseList(head);
+        
     }
     
 };
