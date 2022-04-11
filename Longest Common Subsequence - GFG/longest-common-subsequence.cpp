@@ -12,31 +12,30 @@ class Solution
     //Function to find the length of longest common subsequence in two strings.
     int dp[1001][1001];
     
-    int dpmem(string& text1, string& text2, int m, int n){
-        if(m<0 || n<0)
+    int solve(string &s1, string &s2, int i, int j){
+        if(i<0 || j<0 || i>=s1.size() || j>=s2.size())
             return 0;
-        if(dp[m][n]!=-1)
-            return dp[m][n];
-        
-        int sum=0;
-        if(text1[m]==text2[n]){
-            return dp[m][n]=dpmem(text1,text2,m-1,n-1)+1;
-        }
+            
+        // if(i==s1)
+        if(dp[i][j]!=-1)
+            return dp[i][j];
+            
+        if(s1[i]==s2[j])
+            return dp[i][j]=solve(s1,s2,i+1,j+1)+1;
         else{
-            int a=dpmem(text1,text2,m-1,n);
-            int b=dpmem(text1,text2,m,n-1);
-            int c=dpmem(text1,text2,m-1,n-1);
-            sum=max(a,max(b,c));
+            int a=solve(s1,s2,i+1,j);
+            int b=solve(s1,s2,i,j+1);
+            int c=solve(s1,s2,i+1,j+1);
+            dp[i][j]=max({a,b,c});
         }
-        dp[m][n]=sum;
-        return dp[m][n];
+        return dp[i][j];
     }
     
     int lcs(int x, int y, string s1, string s2)
     {
         // your code here
         memset(dp,-1,sizeof(dp));
-        return dpmem(s1,s2,x-1,y-1);
+        return solve(s1,s2,0,0);
     }
 };
 
