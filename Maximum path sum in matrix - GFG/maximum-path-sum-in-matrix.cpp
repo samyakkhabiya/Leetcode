@@ -10,31 +10,34 @@ using namespace std;
 class Solution{
 public:
     
-    int dpmem(int i, int j, int n, vector<vector<int>>& mat, vector<vector<int>>& dp){
-        if(i<0 || j<0 || i>=n || j>=n)
+    vector<vector<int>> dp;
+    
+    int dfs(vector<vector<int>>& mat, int i, int j){
+        int m=mat.size();
+        int n=mat[0].size();
+        if(i<0 || j<0 || i>=m || j>=n)
             return 0;
+       
         
         if(dp[i][j]!=-1)
             return dp[i][j];
             
-        int a=dpmem(i+1,j,n,mat,dp)+mat[i][j];
-        int b=dpmem(i+1,j-1,n,mat,dp)+mat[i][j];
-        int c=dpmem(i+1,j+1,n,mat,dp)+mat[i][j];
-        dp[i][j]=max(a,max(b,c));
-        return dp[i][j];
-        
+        int a=dfs(mat,i+1,j)+mat[i][j];
+        int b=dfs(mat,i+1,j-1)+mat[i][j];
+        int c=dfs(mat,i+1,j+1)+mat[i][j];
+        return dp[i][j]=max({a,b,c});
     }
     
-    int maximumPath(int n, vector<vector<int>> Matrix)
+    int maximumPath(int N, vector<vector<int>> Matrix)
     {
         // code here
-        vector<vector<int>> dp(n+1,vector<int>(n+1,-1));
+        int m=Matrix.size();
+        int n=Matrix[0].size();
+        dp.resize(m+1,vector<int>(n+1,-1));
         int ans=0;
-        for(int i=0;i<n;i++){
-            for(int j=0;j<n;j++){
-                int a=dpmem(i,j,n,Matrix,dp);
-                ans=max(a,ans);
-            }
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++)
+                ans=max(ans,dfs(Matrix,i,j));
         }
         return ans;
     }
