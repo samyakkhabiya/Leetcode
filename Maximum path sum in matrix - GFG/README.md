@@ -1,5 +1,5 @@
 # Maximum path sum in matrix
-##  Medium 
+## Medium 
 <div class="problem-statement">
                 <p></p><p><span style="font-size:18px">Given a NxN&nbsp;matrix&nbsp;of positive integers.&nbsp;There are only three possible moves from a cell <strong>Matrix[r][c]</strong>.</span></p>
 
