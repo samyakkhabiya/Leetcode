@@ -21,8 +21,10 @@ public:
             ans=root;
             return;
         }
-        dfs(root->left,val);
-        dfs(root->right,val);
+        if(root->val>val)
+            dfs(root->left,val);
+        else
+            dfs(root->right,val);
     }
     
     TreeNode* searchBST(TreeNode* root, int val) {
