@@ -1,19 +1,25 @@
 class Solution {
 public:
-    int recur(vector<int>& nums, int i, int n, int k, int buy, vector<vector<vector<int>>>& dp){
-        if (i==n || k==-1) return 0;
-        if (dp[buy][k][i]!=-1) return dp[buy][k][i];
-        int a, b;
-        if (buy==0){             // buy==0 -> we need to to buy stock i.e no stock in hand
-            a=recur(nums, i+1, n, k, 1, dp)-nums[i];
-            b=recur(nums, i+1, n, k, 0, dp);
-            return dp[buy][k][i]=(a>b)?a:b;
-        }
-        a=recur(nums, i+1, n, k-1, 0, dp)+nums[i];
-        b=recur(nums, i+1, n, k, 1, dp);
-        return dp[buy][k][i]=(a>b)?a:b;
+    vector<vector<vector<int>>> dp;
+    int solve(vector<int> &p,int idx,bool has_stock,int k)
+{
+    if(idx>=p.size()||k<=0)
+        return 0;
+    if(dp[idx][has_stock][k]!=-1)
+        return dp[idx][has_stock][k];
+    if(has_stock)
+    {
+        return dp[idx][has_stock][k]=
+        max(p[idx]+solve(p,idx+1,0,k-1),solve(p,idx+1,1,k));
     }
+    else
+    {
+        return dp[idx][has_stock][k]=
+        max(solve(p,idx+1,1,k)-p[idx],solve(p,idx+1,0,k));
+    }
+}
     int maxProfit(int k, vector<int>& prices) {
+        // memset(dp,-1,sizeof dp);
         int n=prices.size();
         if (k>=n/2){
             int res=0;
@@ -22,9 +28,7 @@ public:
             }
             return res;
         }
-        vector<vector<vector<int>>> dp(2, vector<vector<int>>(k, vector<int> (n, -1)));
-        return recur(prices, 0, n, k-1, 0, dp);
-        
-        
+        dp.resize(n+1, vector<vector<int>>(2, vector<int> (k+1, -1)));
+        return solve(prices,0,0,k);
     }
 };
