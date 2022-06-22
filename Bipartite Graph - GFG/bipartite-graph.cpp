@@ -5,36 +5,31 @@ using namespace std;
  // } Driver Code Ends
 class Solution {
 public:
-
-    bool ans=true;
     vector<int> vis;
-	vector<int> clr;
-	
-    void dfs(int src, vector<int>adj[], int c){
-        if(clr[src]!=-1 && clr[src]!=c){
-            ans=false;
-            return;
+    
+    bool dfs(int node, vector<int> adj[], int col){
+        vis[node]=col;
+        for(auto i:adj[node]){
+            if(!vis[i]){
+                if(dfs(i,adj,3-col))
+                    return true;
+            }
+            else if(vis[i]==col)
+                return true;
         }
-        clr[src]=c;
-        // vis[src]=c;
-        if(vis[src])
-            return;
-        vis[src]=1;
-        for(auto x:adj[src]){
-            dfs(x,adj,3-c);
-        }
-        
+        return false;
     }
-	
+    
 	bool isBipartite(int V, vector<int>adj[]){
 	    // Code here
 	    vis.resize(V,0);
-	    clr.resize(V,-1);
 	    for(int i=0;i<V;i++){
-	        if(!vis[i])
-	            dfs(i,adj,1);
+	        if(!vis[i]){
+	            if(dfs(i,adj,1))
+	                return false;
+	        }
 	    }
-	    return ans;
+	    return true;
 	}
 
 };
