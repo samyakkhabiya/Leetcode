@@ -101,33 +101,31 @@ struct Node {
 // you are required to complete this function
 // the function and return an vector of Node
 // which contains all the duplicate sub-tree
-string solution(Node *root, unordered_map<string, int> &s,vector<Node*> &v){
-   if(!root)
-       return "";
-   // question type using a unordered map for storing the all the substrees for analysis
-   string str = "(";
-   str += solution(root->left, s,v);
-   str += to_string(root->data);
-   str += solution(root->right, s,v);
-   str += ")";
-   // was wrong because the test for every test case the node vector repeated itself
-   if(s.find(str) == s.end())
-       s.insert({str,0});
-   if(s[str] == 1){
-       v.push_back(root);
+vector<Node*>ans;
+   unordered_map<string,int>m;
+   string solve(Node*root){
+       if(!root)
+       return "$";
+       string s=" ";
+       s=s+to_string(root->data);
+       s=s+solve(root->left);
+       s=s+solve(root->right);
+
+       m[s]++;
+       if(m[s]==2){
+       ans.push_back(root);
+       }
+       return s;
+
+  }
+   vector<Node*> printAllDups(Node* root){
+
+       ans.clear();
+       m.clear();
+       solve(root);
+       return ans;
+      
    }
-   s[str]++;
-   return str;
-}
-vector<Node*> printAllDups(Node* root)
-{
-   if(!root)
-       return {};
-   vector<Node*> v;
-   unordered_map<string,int> s;
-   string x = solution(root,s,v);
-   return v;
-}
 
 // { Driver Code Starts.
 int main()
